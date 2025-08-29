@@ -1,0 +1,11 @@
+intent: generic_case
+max_turns: 6
+risk_triggers: [未成年人, 家暴, 涉外, 巨额, 人身伤害]
+slots:
+  summary: { type: text, ask: "请简要描述您的问题，尽量包含时间与主要事实。" }
+  contact: { type: text, ask: "方便留下联系方式或进一步沟通方式吗？" }
+  urgency: { type: enum, options: [一般, 紧急], ask: "此事是否紧急？(一般/紧急)" }
+  related_documents: { type: text, ask: "是否有相关证据或文件？简要描述。" }
+stop_when:
+  - filled: [summary]
+

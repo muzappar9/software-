@@ -1,0 +1,58 @@
+name: Build Android Debug APK (bundle model + lawpack)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "lib/**"
+      - "assets/**"
+      - "pubspec.yaml"
+      - ".github/workflows/build-apk.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.9'
+          channel: 'stable'
+
+      - name: Ensure asset dirs
+        run: mkdir -p assets/models assets/slots
+
+      # 如果你不想在 CI 下载模型，而是本地提交了 models 目录，可把这步删掉
+      - name: Download Gemma 270M GGUF (if secret provided)
+        if: ${{ env.MODEL_URL != '' }}
+        env:
+          MODEL_URL: ${{ secrets.MODEL_URL }}
+        run: |
+          set -eux
+          cd assets/models
+          curl -L "$MODEL_URL" -o gemma-3-270m-instruct-q4_0.gguf
+          ls -lh
+
+      - name: Check LawPack & slots
+        run: |
+          test -f assets/lawpack.db
+          ls -lh assets/lawpack.db
+          find assets/slots -maxdepth 1 -type f | wc -l || true
+          ls -lh assets/models || true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build APK (debug, split per ABI)
+        run: |
+          flutter build apk --debug --split-per-abi
+          ls -lh build/app/outputs/flutter-apk
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: apks
+          path: build/app/outputs/flutter-apk/*.apk

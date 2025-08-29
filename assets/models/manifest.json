@@ -1,0 +1,11 @@
+{
+  "models": [{
+    "name": "gemma-270m-int4",
+    "format": "gguf",
+    "sha256": "",
+    "size": 280000000,
+    "localPath": "",
+    "url": ""
+  }]
+}
+

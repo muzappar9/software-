@@ -1,0 +1,11 @@
+intent: contract_dispute
+max_turns: 6
+risk_triggers: [合同无效, 欺诈, 重大违约, 涉外]
+slots:
+  parties: { type: text, ask: "合同双方当事人是谁？" }
+  subject: { type: text, ask: "合同标的/主要权利义务是什么？" }
+  breach: { type: text, ask: "对方违约的具体行为或时间？" }
+  damages: { type: text, ask: "是否发生损失，估算金额？" }
+stop_when:
+  - filled: [parties, breach]
+

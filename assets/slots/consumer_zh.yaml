@@ -1,0 +1,11 @@
+intent: consumer_protection
+max_turns: 6
+risk_triggers: [假冒伪劣, 退款纠纷, 维权困难]
+slots:
+  seller: { type: text, ask: "商家名称或平台？" }
+  product: { type: text, ask: "商品或服务是什么？" }
+  issue: { type: text, ask: "出现了什么问题（质量/退货/售后）？" }
+  order_info: { type: text, ask: "有订单号或交易凭证吗？" }
+stop_when:
+  - filled: [seller, issue]
+

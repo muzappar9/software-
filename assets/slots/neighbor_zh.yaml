@@ -1,0 +1,11 @@
+intent: neighbor_dispute
+max_turns: 6
+risk_triggers: [噪音, 财产损害, 人身冲突]
+slots:
+  neighbor: { type: text, ask: "对方邻居描述或地址？" }
+  issue: { type: text, ask: "争议内容（噪音/占用/排水等）？" }
+  duration: { type: text, ask: "问题持续多久？" }
+  evidence: { type: text, ask: "是否有录音/照片/证人？" }
+stop_when:
+  - filled: [neighbor, issue]
+

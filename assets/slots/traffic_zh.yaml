@@ -1,0 +1,11 @@
+intent: traffic_accident
+max_turns: 6
+risk_triggers: [人伤, 死亡, 涉外, 逃逸]
+slots:
+  date_time: { type: text, ask: "事故发生时间？" }
+  location: { type: text, ask: "事故发生地点？" }
+  injuries: { type: text, ask: "是否有人员受伤？程度如何？" }
+  photos: { type: bool, ask: "是否拍照或有视频？(有/无)" }
+stop_when:
+  - filled: [date_time, injuries]
+

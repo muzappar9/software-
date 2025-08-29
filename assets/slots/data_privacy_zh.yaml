@@ -1,0 +1,11 @@
+intent: data_privacy
+max_turns: 6
+risk_triggers: [隐私泄露, 个人信息, 涉外]
+slots:
+  controller: { type: text, ask: "涉及数据控制者/平台是谁？" }
+  data_type: { type: text, ask: "泄露或处理的数据类型？" }
+  disclosure: { type: text, ask: "是否对外披露/转移？简述情形。" }
+  harm: { type: text, ask: "是否造成经济/名誉损失？" }
+stop_when:
+  - filled: [controller, data_type]
+

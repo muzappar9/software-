@@ -1,0 +1,11 @@
+intent: administrative_foi
+max_turns: 6
+risk_triggers: [政府信息, 非公开, 涉外]
+slots:
+  agency: { type: text, ask: "要申请信息公开的单位是？" }
+  info_scope: { type: text, ask: "需要公开哪类信息或时间范围？" }
+  purpose: { type: text, ask: "申请目的或用途？" }
+  prior_requests: { type: text, ask: "是否已向该单位提出过申请？结果如何？" }
+stop_when:
+  - filled: [agency, info_scope]
+

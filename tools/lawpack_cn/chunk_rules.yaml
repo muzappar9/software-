@@ -1,0 +1,16 @@
+split_patterns:
+  - '(?=第\s*[一二三四五六七八九十百千万零〇0-9]+\s*条)'
+normalize:
+  strip_space: true
+  collapse_whitespace: true
+defaults:
+  lang: "zh"
+  version_id: "local-dev"
+topic_map:
+  婚姻: "divorce"
+  离婚: "divorce"
+  劳动: "labor"
+  合同: "contract"
+  交通: "traffic"
+  租赁: "tenancy"
+

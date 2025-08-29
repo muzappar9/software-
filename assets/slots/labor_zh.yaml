@@ -1,0 +1,11 @@
+intent: labor_dispute
+max_turns: 6
+risk_triggers: [欠薪, 劳动合同, 非法解雇, 未成年]
+slots:
+  employer: { type: text, ask: "请提供用人单位名称或描述该单位。" }
+  claim_amount: { type: text, ask: "涉及金额/工资拖欠数额是多少？" }
+  contract_signed: { type: bool, ask: "是否签署劳动合同？(是/否)" }
+  termination: { type: text, ask: "是否有被辞退或解除合同的情况？简述时间与方式。" }
+stop_when:
+  - filled: [employer, claim_amount]
+

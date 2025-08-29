@@ -1,0 +1,11 @@
+intent: enforcement
+max_turns: 6
+risk_triggers: [强制执行, 保全, 人身危险]
+slots:
+  case_no: { type: text, ask: "执行案件号或法院名称？" }
+  target: { type: text, ask: "被执行人/财产信息？" }
+  relief: { type: text, ask: "您希望法院采取何种保全/执行措施？" }
+  urgency: { type: enum, options: [一般, 紧急], ask: "执行是否有时效或紧急性？" }
+stop_when:
+  - filled: [case_no, target]
+

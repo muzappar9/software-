@@ -1,0 +1,11 @@
+intent: medical_dispute
+max_turns: 6
+risk_triggers: [医疗过错, 重伤, 死亡, 未成年]
+slots:
+  hospital: { type: text, ask: "医院名称或科室？" }
+  treatment: { type: text, ask: "具体治疗或手术名称？" }
+  outcome: { type: text, ask: "目前后果/损害如何？" }
+  evidence: { type: text, ask: "是否有病历/化验结果/影像？" }
+stop_when:
+  - filled: [hospital, outcome]
+

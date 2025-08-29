@@ -1,0 +1,11 @@
+intent: tort_personality
+max_turns: 6
+risk_triggers: [名誉侵权, 个人隐私泄露, 诽谤]
+slots:
+  offender: { type: text, ask: "侵权方是谁？" }
+  act: { type: text, ask: "具体侵权行为或时间点？" }
+  harm: { type: text, ask: "造成何种损害（精神/名誉/经济）？" }
+  evidence: { type: text, ask: "是否有截图/录音/证人？" }
+stop_when:
+  - filled: [offender, act]
+

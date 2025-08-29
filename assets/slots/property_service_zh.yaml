@@ -1,0 +1,11 @@
+intent: property_service
+max_turns: 6
+risk_triggers: [服务欠费, 物业侵权, 停车纠纷]
+slots:
+  provider: { type: text, ask: "物业/服务提供方名称？" }
+  issue: { type: text, ask: "问题描述（例如：维修不作为/乱收费/侵权）" }
+  contract: { type: bool, ask: "是否有服务合同或约定？(有/无)" }
+  evidence: { type: text, ask: "是否有照片/报修记录/通知？" }
+stop_when:
+  - filled: [provider, issue]
+

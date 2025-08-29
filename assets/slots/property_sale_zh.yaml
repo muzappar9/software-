@@ -1,0 +1,11 @@
+intent: property_sale
+max_turns: 6
+risk_triggers: [房产纠纷, 欠款, 开发商违约]
+slots:
+  buyer: { type: text, ask: "买方是谁？" }
+  seller: { type: text, ask: "卖方/开发商是谁？" }
+  contract: { type: bool, ask: "是否签订购房合同？(是/否)" }
+  defects: { type: text, ask: "是否存在质量问题或烂尾？简述。" }
+stop_when:
+  - filled: [buyer, seller]
+

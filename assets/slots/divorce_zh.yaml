@@ -1,0 +1,14 @@
+intent: civil_divorce
+max_turns: 6
+risk_triggers: [家暴, 未成年人争议, 涉外, 巨额, 大额财产]
+slots:
+  marriage_years: { type: int,  ask: "你们结婚几年了？目前是否分居？" }
+  has_children:   { type: bool, ask: "有未成年子女吗？大概几岁？" }
+  joint_assets:   { type: text, ask: "婚后共同财产概况（房/车/存款/贷款）？" }
+  reason:
+    type: enum
+    options: [性格不合, 分居满一年, 家暴, 出轨, 其他]
+    ask: "主要离婚原因是？（性格不合/分居满一年/家暴/出轨/其他）"
+stop_when:
+  - filled: [marriage_years, has_children, reason]
+

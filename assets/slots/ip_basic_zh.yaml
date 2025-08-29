@@ -1,0 +1,11 @@
+intent: ip_basic
+max_turns: 6
+risk_triggers: [侵权, 版权, 商标, 专利]
+slots:
+  right_holder: { type: text, ask: "权利人是谁（个人/企业）？" }
+  work: { type: text, ask: "涉及作品/商标/专利的名称或描述？" }
+  infringement: { type: text, ask: "发现了怎样的侵权行为？" }
+  evidence: { type: text, ask: "是否有链接/截图/销售凭证？" }
+stop_when:
+  - filled: [right_holder, work]
+

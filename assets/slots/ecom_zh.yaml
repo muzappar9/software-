@@ -1,0 +1,11 @@
+intent: ecommerce_dispute
+max_turns: 6
+risk_triggers: [退款纠纷, 假货, 平台责任]
+slots:
+  platform: { type: text, ask: "涉及的平台或商家？" }
+  order: { type: text, ask: "订单号或商品信息？" }
+  problem: { type: text, ask: "问题是什么（发错/假货/退款被拒）？" }
+  contact_attempts: { type: text, ask: "是否已联系商家/平台客服？结果如何？" }
+stop_when:
+  - filled: [platform, problem]
+

@@ -1,0 +1,11 @@
+intent: criminal_entry
+max_turns: 6
+risk_triggers: [伤害, 死亡, 报案, 涉外]
+slots:
+  incident: { type: text, ask: "发生了什么事件？简述时间与地点。" }
+  suspect: { type: text, ask: "嫌疑人信息（如有）？" }
+  evidence: { type: text, ask: "是否有监控/目击/物证？" }
+  police_reported: { type: bool, ask: "是否已报警？(是/否)" }
+stop_when:
+  - filled: [incident]
+

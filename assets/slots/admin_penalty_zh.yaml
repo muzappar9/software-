@@ -1,0 +1,11 @@
+intent: administrative_penalty
+max_turns: 6
+risk_triggers: [罚款, 行政查处, 申请复议]
+slots:
+  authority: { type: text, ask: "作出处罚的行政机关是？" }
+  case_no: { type: text, ask: "处罚决定编号或时间？" }
+  reason: { type: text, ask: "处罚理由或事实简述？" }
+  desired_action: { type: enum, options: [复议, 申诉, 撤销], ask: "您希望采取什么措施？" }
+stop_when:
+  - filled: [authority, reason]
+

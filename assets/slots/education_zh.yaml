@@ -1,0 +1,11 @@
+intent: education_dispute
+max_turns: 6
+risk_triggers: [校规侵权, 未成年, 体罚]
+slots:
+  school: { type: text, ask: "学校或教育机构名称？" }
+  issue: { type: text, ask: "发生了什么事（考试/处分/体罚等）？" }
+  student: { type: text, ask: "涉事学生年龄或年级？" }
+  evidence: { type: text, ask: "是否有通知/记录/证人？" }
+stop_when:
+  - filled: [school, issue]
+

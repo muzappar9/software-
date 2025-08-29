@@ -1,0 +1,11 @@
+intent: debt_dispute
+max_turns: 6
+risk_triggers: [借条, 欠款, 非法催收, 涉外]
+slots:
+  creditor: { type: text, ask: "债权人是谁？" }
+  debtor: { type: text, ask: "债务人是谁？" }
+  loan_amount: { type: text, ask: "本金及利息约多少？" }
+  evidence: { type: text, ask: "是否有借条/转账记录/聊天记录？" }
+stop_when:
+  - filled: [creditor, loan_amount]
+

@@ -1,0 +1,11 @@
+intent: tenancy_dispute
+max_turns: 6
+risk_triggers: [押金纠纷, 强制驱逐, 未成年人]
+slots:
+  landlord: { type: text, ask: "房东是谁或房屋位置？" }
+  tenant: { type: text, ask: "承租人是谁？" }
+  deposit: { type: text, ask: "押金金额及是否退还争议？" }
+  eviction: { type: text, ask: "是否存在驱逐或强制搬迁？" }
+stop_when:
+  - filled: [deposit]
+

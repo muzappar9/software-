@@ -1,0 +1,11 @@
+intent: guarantee_dispute
+max_turns: 6
+risk_triggers: [担保, 抵押, 质押, 大额]
+slots:
+  creditor: { type: text, ask: "债权人/权利人是谁？" }
+  guarantor: { type: text, ask: "担保人（个人/企业）是谁？" }
+  collateral: { type: text, ask: "抵押/质押标的是什么（房/车/股权）？" }
+  amount: { type: text, ask: "涉案金额或担保金额？" }
+stop_when:
+  - filled: [creditor, collateral]
+
