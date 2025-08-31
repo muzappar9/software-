@@ -7,10 +7,19 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+      vars:
+        JAVA_TOOL_OPTIONS: "-Xmx5g"
     scripts:
       - name: Set up local properties
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > "$FCI_BUILD_DIR/android/local.properties"
+
+      - name: Setup Gradle properties for memory
+        script: |
+          mkdir -p $HOME/.gradle
+          echo "org.gradle.jvmargs=-Xmx5g" > $HOME/.gradle/gradle.properties
+          echo "org.gradle.daemon=true" >> $HOME/.gradle/gradle.properties
+          echo "org.gradle.parallel=true" >> $HOME/.gradle/gradle.properties
 
       - name: Get Flutter packages
         script: |
