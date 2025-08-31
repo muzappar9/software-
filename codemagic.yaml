@@ -12,7 +12,7 @@ workflows:
       xcode: latest
       cocoapods: default
       vars:
-        JAVA_TOOL_OPTIONS: "-Xmx8g"
+        JAVA_TOOL_OPTIONS: "-Xmx6g"
     scripts:
       - name: Set up local properties
         script: |
@@ -21,7 +21,7 @@ workflows:
       - name: Setup Gradle properties for memory
         script: |
           mkdir -p $HOME/.gradle
-          echo "org.gradle.jvmargs=-Xmx8g" > $HOME/.gradle/gradle.properties
+          echo "org.gradle.jvmargs=-Xmx6g" > $HOME/.gradle/gradle.properties
           echo "org.gradle.daemon=true" >> $HOME/.gradle/gradle.properties
           echo "org.gradle.parallel=true" >> $HOME/.gradle/gradle.properties
 
