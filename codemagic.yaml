@@ -11,6 +11,7 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+      java: 17
       vars:
         JAVA_TOOL_OPTIONS: "-Xmx6g"
     scripts:
