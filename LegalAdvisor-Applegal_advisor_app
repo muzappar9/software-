@@ -1,0 +1,3 @@
+[33md51cabe[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Fix: Remove Android signing requirement for testing
+[33m762b712[m Initial commit: Legal Advisor Flutter app with Codemagic CI/CD
+[33m5ab38f0[m Update gitignore to temporarily exclude large files
