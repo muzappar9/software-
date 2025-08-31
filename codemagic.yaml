@@ -7,8 +7,8 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups:
-        - android-signing
+      # groups:
+      #   - android-signing
     scripts:
       - name: Set up local properties
         script: |
@@ -26,11 +26,11 @@ workflows:
       - build/app/outputs/flutter-apk/app-release.apk
 
     publishing:
-      android_signing:
-        keystore: $CM_KEYSTORE
-        keystore_password: $CM_KEYSTORE_PASSWORD
-        key_alias: $CM_KEY_ALIAS
-        key_password: $CM_KEY_ALIAS_PASSWORD
+      # android_signing:
+      #   keystore: $CM_KEYSTORE
+      #   keystore_password: $CM_KEYSTORE_PASSWORD
+      #   key_alias: $CM_KEY_ALIAS
+      #   key_password: $CM_KEY_ALIAS_PASSWORD
       
       email:
         recipients:
