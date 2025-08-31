@@ -18,7 +18,7 @@ workflows:
 
       - name: Build APK with Flutter
         script: |
-          flutter build apk --release --android-skip-build-dependency-validation
+          flutter build apk --release
           
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
