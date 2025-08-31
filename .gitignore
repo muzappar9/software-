@@ -49,7 +49,15 @@ app.*.map.json
 *.bin
 *.task
 
-# Database files
+# Database files - use Git LFS  
 *.db
 *.sqlite
 *.sqlite3
+
+# APK files - use Git LFS
+*.apk
+*.aab
+
+# Temporary files
+.tmp/
+temp/
