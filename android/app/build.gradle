@@ -67,7 +67,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Kotlin标准库由插件自动管理，无需手动添加
     
     // 简化的MediaPipe依赖 (ARM官方教程推荐的稳定版本)
     implementation 'com.google.mediapipe:tasks-vision:0.10.15'
