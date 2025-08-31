@@ -1,145 +1,40 @@
 workflows:
   android-workflow:
-    name: Android Workflow
-    max_build_duration: 120
+    name: Android Build
     instance_type: mac_mini_m1
-    cache:
-      cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
-        - $HOME/.gradle/caches
-        - $HOME/Library/Caches/CocoaPods
+    max_build_duration: 120
     environment:
-      android_signing:
-        - keystore_reference
-      groups:
-        - google_play
-      vars:
-        PACKAGE_NAME: "com.legaladvisor.app"
-        GOOGLE_PLAY_TRACK: "internal"
       flutter: stable
       xcode: latest
       cocoapods: default
+      groups:
+        - android-signing
     scripts:
-      - name: 🛠️ Set up local.properties
+      - name: Set up local properties
         script: |
-          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
-      
-      - name: 🔧 Get Flutter packages
+          echo "flutter.sdk=$FLUTTER_ROOT" > "$FCI_BUILD_DIR/android/local.properties"
+
+      - name: Get Flutter packages
         script: |
           flutter packages pub get
-          
-      - name: 📦 Install Flutter dependencies
+
+      - name: Build APK with Flutter
         script: |
-          flutter pub get
-          flutter pub run build_runner build --delete-conflicting-outputs
-          
-      - name: ⚙️ Set up Android SDK
-        script: |
-          export ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT
-          yes | sdkmanager --licenses
-          
-      - name: 🏗️ Flutter analyze
-        script: |
-          flutter analyze --fatal-infos --fatal-warnings
-          
-      - name: 🧪 Flutter test
-        script: |
-          flutter test
-        ignore_failure: true
-          
-      - name: 📱 Build APK
-        script: |
-          flutter build apk --release --target-platform android-arm64 --verbose
-          
-      - name: 📦 Build AAB for Google Play
-        script: |
-          flutter build appbundle --release --verbose
+          flutter build apk --release
           
     artifacts:
-      - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
-      
+      - build/app/outputs/flutter-apk/app-release.apk
+
     publishing:
-      # Slack notifications
-      slack:
-        channel: '#builds'
-        notify_on_build_start: true
+      android_signing:
+        keystore: $CM_KEYSTORE
+        keystore_password: $CM_KEYSTORE_PASSWORD
+        key_alias: $CM_KEY_ALIAS
+        key_password: $CM_KEY_ALIAS_PASSWORD
+      
+      email:
+        recipients:
+          - your_email@example.com
         notify:
           success: true
           failure: true
-      
-      # Google Play Console publishing
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: $GOOGLE_PLAY_TRACK
-        submit_as_draft: true
-
-  ios-workflow:
-    name: iOS Workflow
-    max_build_duration: 120
-    instance_type: mac_mini_m1
-    cache:
-      cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
-        - $HOME/Library/Caches/CocoaPods
-    environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.legaladvisor.app
-      vars:
-        BUNDLE_ID: "com.legaladvisor.app"
-        XCODE_WORKSPACE: "Runner.xcworkspace"
-        XCODE_SCHEME: "Runner"
-        APP_STORE_APP_ID: 1555555555
-      flutter: stable
-      xcode: latest
-      cocoapods: default
-    scripts:
-      - name: 🔧 Get Flutter packages
-        script: |
-          flutter packages pub get
-          
-      - name: 📦 Install Flutter dependencies
-        script: |
-          flutter pub get
-          flutter pub run build_runner build --delete-conflicting-outputs
-          
-      - name: 🍎 Install CocoaPods dependencies
-        script: |
-          cd ios && pod install
-          
-      - name: 🏗️ Flutter analyze
-        script: |
-          flutter analyze --fatal-infos --fatal-warnings
-          
-      - name: 🧪 Flutter test
-        script: |
-          flutter test
-        ignore_failure: true
-          
-      - name: 📱 Build iOS
-        script: |
-          flutter build ios --release --no-codesign
-          
-      - name: 🍎 Build iOS IPA
-        script: |
-          xcode-project build-ipa \
-            --workspace ios/$XCODE_WORKSPACE \
-            --scheme $XCODE_SCHEME \
-            --export-options-plist ios/ExportOptions.plist
-            
-    artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-      - flutter_drive.log
-      
-    publishing:
-      # App Store Connect publishing
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
-        submit_to_app_store: false
