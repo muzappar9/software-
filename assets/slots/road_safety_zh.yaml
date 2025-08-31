@@ -1,0 +1,42 @@
+# 道路交通安全法案由配置
+intent: road_safety_violation
+title: "道路交通安全违法"
+description: "交通违章、驾驶证、交通安全相关咨询"
+
+risk_words: ["酒驾", "醉驾", "肇事逃逸", "无证驾驶", "吊销驾照"]
+
+slots:
+  violation_type:
+    type: enum
+    options: ["超速", "违停", "闯红灯", "酒驾/醉驾", "无证驾驶", "超载", "逆行", "其他"]
+    ask: "交通违法类型？"
+    
+  penalty_received:
+    type: text
+    ask: "收到的处罚通知？(罚款金额/扣分/其他)"
+    
+  vehicle_type:
+    type: enum
+    options: ["小型汽车", "大型货车", "摩托车", "电动车", "其他"]
+    ask: "涉事车辆类型？"
+    
+  has_evidence:
+    type: bool
+    ask: "是否有违法行为证据？(是/否)"
+    
+  wants_appeal:
+    type: bool
+    ask: "是否想要申请行政复议？(是/否)"
+    
+  license_status:
+    type: enum
+    options: ["有效", "过期", "暂扣", "吊销", "无驾照"]
+    ask: "驾驶证状态？"
+
+next_questions:
+  - condition: "violation_type == '酒驾/醉驾'"
+    action: "risk_escalation" 
+    message: "酒驾醉驾涉及刑事责任，建议咨询专业律师"
+  - condition: "wants_appeal == True"
+    action: "guidance"
+    message: "可在60日内向上级公安机关申请行政复议"

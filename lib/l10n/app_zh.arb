@@ -15,7 +15,7 @@
   "dark": "深色",
   "system": "跟随系统",
   "start": "开始",
-  "continue": "继续",
+  "continueBtn": "继续",
   "cancel": "取消",
   "confirm": "确认",
   "send": "发送",

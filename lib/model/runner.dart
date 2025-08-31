@@ -1,27 +1,3 @@
-class Runner {
-  static String mockGenerate(String topic, Map<String, String> slots, List<String> lawpoints) {
-    final buffer = StringBuffer();
-    buffer.writeln('以下是基于您提供信息的法律建议（示例）：');
-    buffer.writeln();
-    buffer.writeln('1. 初步判断：根据描述，可能涉及 $topic 相关法律问题。');
-    buffer.writeln('2. 建议步骤：');
-    buffer.writeln('- 收集证据并保留证据原件；');
-    buffer.writeln('- 与对方沟通或咨询律师；');
-    buffer.writeln('- 必要时申请仲裁或提起诉讼。');
-    buffer.writeln();
-    buffer.writeln('参考要点：');
-    for (var p in lawpoints) {
-      buffer.writeln('- $p');
-    }
-    // ensure length ~150-220 chars
-    var out = buffer.toString();
-    if (out.length < 150) {
-      out = out + '\n建议：及时咨询专业律师以获取详细法律意见。';
-    }
-    return out;
-  }
-}
-
 import 'dart:async';
 import 'llama_runner.dart';
 
@@ -48,14 +24,40 @@ class Runner {
   }
 
   Future<String> generate(String prompt, {int maxTokens = 256}) async {
-    if (_impl == null) throw Exception('ModelRunner impl not set');
-    return await _impl!.generate(prompt: prompt, maxTokens: maxTokens);
+    if (_impl == null) {
+      // 使用MockRunner的静态方法
+      return MockRunner.mockGenerate('通用案例', {}, []);
+    }
+    return _impl!.generate(prompt: prompt, maxTokens: maxTokens);
   }
 
   Future<void> unload() async {
-    if (_impl == null) return;
-    await _impl!.unload();
+    if (_impl != null) {
+      await _impl!.unload();
+    }
   }
 }
 
-
+class MockRunner {
+  static String mockGenerate(String topic, Map<String, String> slots, List<String> lawpoints) {
+    final buffer = StringBuffer();
+    buffer.writeln('以下是基于您提供信息的法律建议（示例）：');
+    buffer.writeln();
+    buffer.writeln('1. 初步判断：根据描述，可能涉及 $topic 相关法律问题。');
+    buffer.writeln('2. 建议步骤：');
+    buffer.writeln('- 收集证据并保留证据原件；');
+    buffer.writeln('- 与对方沟通或咨询律师；');
+    buffer.writeln('- 必要时申请仲裁或提起诉讼。');
+    buffer.writeln();
+    buffer.writeln('参考要点：');
+    for (var p in lawpoints) {
+      buffer.writeln('- $p');
+    }
+    // ensure length ~150-220 chars
+    var out = buffer.toString();
+    if (out.length < 150) {
+      out = out + '\n建议：及时咨询专业律师以获取详细法律意见。';
+    }
+    return out;
+  }
+}

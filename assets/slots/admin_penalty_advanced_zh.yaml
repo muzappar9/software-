@@ -1,0 +1,50 @@
+# 行政处罚法高级案由配置
+intent: admin_penalty_advanced
+title: "行政处罚法深度应用"
+description: "行政处罚程序、行政复议、行政诉讼等"
+
+risk_words: ["拘留", "吊销许可证", "重大罚款", "查封扣押"]
+
+slots:
+  penalty_type:
+    type: enum
+    options: ["警告", "罚款", "没收财物", "责令停产停业", "暂扣许可证", "吊销许可证", "行政拘留", "其他"]
+    ask: "行政处罚类型？"
+    
+  penalty_amount:
+    type: text
+    ask: "处罚金额？(如适用，元)"
+    
+  administrative_body:
+    type: text
+    ask: "作出处罚的行政机关？"
+    
+  procedure_followed:
+    type: enum
+    options: ["简易程序", "一般程序", "听证程序", "不清楚"]
+    ask: "处罚程序类型？"
+    
+  violation_admitted:
+    type: bool
+    ask: "是否承认违法事实？(是/否)"
+    
+  wants_review:
+    type: enum
+    options: ["申请行政复议", "提起行政诉讼", "同时申请", "不申请", "未决定"]
+    ask: "救济途径选择？"
+    
+  time_since_penalty:
+    type: text
+    ask: "收到处罚决定书多长时间了？(天数)"
+    
+  has_legal_basis:
+    type: bool
+    ask: "处罚决定是否告知法律依据？(是/否)"
+
+next_questions:
+  - condition: "time_since_penalty > '60'"
+    action: "risk_escalation"
+    message: "可能已超过行政复议申请期限，建议立即咨询律师"
+  - condition: "penalty_type == '行政拘留'"
+    action: "guidance"
+    message: "行政拘留处罚严重，建议委托律师申请行政复议或诉讼"

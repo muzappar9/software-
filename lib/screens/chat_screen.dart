@@ -13,10 +13,10 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:yaml/yaml.dart';
 import '../model/runner.dart';
 import '../model/llama_runner.dart';
-import '../model/prompts.dart';
+// import '../model/prompts.dart'; // 未使用
 import '../rag/lawpack.dart';
 import '../services/lawpack_init.dart';
-import 'chat_flow.dart';
+import 'chat_flow_fixed.dart';
 
 /// 主聊天界面 - 简约风格
 class ChatScreen extends ConsumerStatefulWidget {
@@ -189,27 +189,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ),
       child: Row(
         children: [
-          // 左上角菜单按钮（三条线 - 一大一小）
+          // 左上角菜单按钮
           IconButton(
             onPressed: () {
               _scaffoldKey.currentState?.openDrawer();
             },
-            icon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 20,
-                  height: 3,
-                  color: AppTheme.textPrimary,
-                ),
-                const SizedBox(height: 3),
-                Container(
-                  width: 14,
-                  height: 2,
-                  color: AppTheme.textPrimary,
-                ),
-              ],
-            ),
+            icon: const Icon(Icons.menu, color: AppTheme.textPrimary),
           ),
           
           const Spacer(),
@@ -476,6 +461,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           // 输入框
           Expanded(
             child: Container(
+              constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(24),
@@ -484,6 +470,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               child: TextField(
                 controller: _messageController,
                 maxLines: null,
+                keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
                   hintText: '输入您的法律问题...',
                   border: InputBorder.none,

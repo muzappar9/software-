@@ -11,7 +11,7 @@ class SidebarMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     
     return Container(
       width: 280,
@@ -46,7 +46,7 @@ class SidebarMenu extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      l10n.appTitle,
+                      l10n?.appTitle ?? '法律顾问',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -73,14 +73,14 @@ class SidebarMenu extends ConsumerWidget {
               children: [
                 _buildMenuItem(
                   icon: Icons.chat_bubble_outline,
-                  title: l10n.newChat,
+                  title: l10n?.newChat ?? '新对话',
                   onTap: () {
                     // 开始新对话
                   },
                 ),
                 _buildMenuItem(
                   icon: Icons.history,
-                  title: l10n.chatHistory,
+                  title: l10n?.chatHistory ?? '对话历史',
                   onTap: () {
                     // 查看对话历史
                   },
@@ -88,30 +88,30 @@ class SidebarMenu extends ConsumerWidget {
                 const Divider(height: 1),
                 _buildMenuItem(
                   icon: Icons.folder_special,
-                  title: l10n.personalDatabase,
+                  title: l10n?.personalDatabase ?? '个人数据库',
                   subtitle: 'SVIP',
                   isLocked: true,
                   onTap: () {
-                    _showSvipDialog(context, l10n);
+                    _showSvipDialog(context);
                   },
                 ),
                 _buildMenuItem(
                   icon: Icons.library_books,
-                  title: l10n.legalDatabase,
+                  title: l10n?.legalDatabase ?? '法律数据库',
                   onTap: () {
                     // 查看法律资料
                   },
                 ),
                 _buildMenuItem(
                   icon: Icons.quiz,
-                  title: l10n.legalQA,
+                  title: l10n?.legalQA ?? '法律问答',
                   onTap: () {
                     // 法律问答功能
                   },
                 ),
                 _buildMenuItem(
                   icon: Icons.school,
-                  title: l10n.legalStudy,
+                  title: l10n?.legalStudy ?? '法律学习',
                   onTap: () {
                     // 法律学习功能
                   },
@@ -121,14 +121,14 @@ class SidebarMenu extends ConsumerWidget {
                 _buildUIModeToggle(context, ref),
                 _buildMenuItem(
                   icon: Icons.settings,
-                  title: l10n.settings,
+                  title: l10n?.settings ?? '设置',
                   onTap: () {
                     // 打开设置
                   },
                 ),
                 _buildMenuItem(
                   icon: Icons.help_outline,
-                  title: l10n.helpFeedback,
+                  title: l10n?.helpFeedback ?? '帮助与反馈',
                   onTap: () {
                     // 帮助与反馈
                   },

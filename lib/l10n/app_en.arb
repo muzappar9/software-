@@ -15,7 +15,7 @@
   "dark": "Dark",
   "system": "System",
   "start": "Start",
-  "continue": "Continue",
+  "continueBtn": "Continue",
   "cancel": "Cancel",
   "confirm": "Confirm",
   "send": "Send",

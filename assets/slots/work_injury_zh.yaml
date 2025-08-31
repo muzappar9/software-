@@ -1,0 +1,51 @@
+# 工伤保险案由配置
+intent: work_injury_insurance
+title: "工伤保险纠纷"
+description: "工伤认定、保险赔偿相关咨询"
+
+risk_words: ["死亡", "重伤", "职业病", "工亡", "一级伤残", "涉外"]
+
+slots:
+  injury_time:
+    type: text
+    ask: "工伤发生的具体时间？(年月日)"
+    
+  injury_place:
+    type: text  
+    ask: "工伤发生地点？(工作场所/上下班途中/其他)"
+    
+  injury_cause:
+    type: enum
+    options: ["工作时间内意外", "职业病", "上下班途中事故", "工作原因猝死", "其他"]
+    ask: "工伤原因类型？"
+    
+  injury_level:
+    type: enum
+    options: ["轻微", "一般", "较重", "严重", "死亡", "未鉴定"]
+    ask: "伤害程度？"
+    
+  has_work_contract:
+    type: bool
+    ask: "是否签订劳动合同？(是/否)"
+    
+  employer_attitude:
+    type: enum
+    options: ["积极配合", "消极推诿", "拒绝认定", "未表态"]
+    ask: "用人单位态度？"
+    
+  applied_certification:
+    type: bool
+    ask: "是否已申请工伤认定？(是/否)"
+    
+  insurance_status:
+    type: enum
+    options: ["已缴纳工伤保险", "未缴纳", "不清楚"]
+    ask: "用人单位是否缴纳工伤保险？"
+
+next_questions:
+  - condition: "injury_level == '死亡' or injury_level == '严重'"
+    action: "risk_escalation"
+    message: "建议立即联系专业律师或政府工伤认定部门"
+  - condition: "applied_certification == False"
+    action: "guidance"
+    message: "需要在30日内向劳动部门申请工伤认定"

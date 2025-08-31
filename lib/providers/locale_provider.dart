@@ -49,6 +49,8 @@ class LocaleNotifier extends StateNotifier<Locale?> {
         return '中文';
       case 'ug':
         return 'ئۇيغۇرچە';
+      case 'kk':
+        return 'Қазақша';
       case 'en':
       default:
         return 'English';
@@ -59,5 +61,6 @@ class LocaleNotifier extends StateNotifier<Locale?> {
   List<Locale> get supportedLocales => const [
     Locale('zh'),
     Locale('ug'),
+    Locale('kk'), // 添加哈萨克语支持
   ];
 }

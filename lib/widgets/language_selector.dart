@@ -14,8 +14,12 @@ class LanguageSelector extends ConsumerWidget {
     final localeNotifier = ref.read(localeProvider.notifier);
     
     return PopupMenuButton<Locale>(
-      onSelected: (Locale selectedLocale) {
-        localeNotifier.setLocale(selectedLocale);
+      onSelected: (Locale selectedLocale) async {
+        await localeNotifier.setLocale(selectedLocale);
+        // 强制重建整个应用以应用新语言
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        }
       },
       itemBuilder: (BuildContext context) => [
         _buildLanguageMenuItem(

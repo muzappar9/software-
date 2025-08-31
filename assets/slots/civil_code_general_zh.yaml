@@ -1,0 +1,47 @@
+# 民法典通用案由配置
+intent: civil_code_general
+title: "民法典通用条款"
+description: "民事权利、民事义务、民事责任等基础问题"
+
+risk_words: ["无民事行为能力", "限制民事行为能力", "重大误解", "显失公平"]
+
+slots:
+  legal_relationship:
+    type: enum
+    options: ["财产关系", "人身关系", "知识产权关系", "继承关系", "侵权关系", "其他"]
+    ask: "涉及的法律关系类型？"
+    
+  subject_capacity:
+    type: enum
+    options: ["完全民事行为能力人", "限制民事行为能力人", "无民事行为能力人", "不确定"]
+    ask: "当事人民事行为能力？"
+    
+  civil_act_nature:
+    type: enum
+    options: ["有效", "无效", "可撤销", "效力待定", "不确定"]
+    ask: "民事行为效力状态？"
+    
+  dispute_subject:
+    type: text
+    ask: "争议的具体标的？(财产/权利等)"
+    
+  time_occurred:
+    type: text
+    ask: "争议事实发生时间？"
+    
+  has_written_evidence:
+    type: bool
+    ask: "是否有书面证据？(是/否)"
+    
+  seeking_remedy:
+    type: enum
+    options: ["确认权利", "要求履行", "损害赔偿", "返还财产", "停止侵害", "其他"]
+    ask: "寻求的救济方式？"
+
+next_questions:
+  - condition: "subject_capacity == '无民事行为能力人'"
+    action: "guidance"
+    message: "无民事行为能力人的行为无效，需要法定代理人处理"
+  - condition: "civil_act_nature == '可撤销'"
+    action: "guidance" 
+    message: "可撤销行为需在知道或应当知道撤销事由之日起一年内行使"

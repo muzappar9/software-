@@ -1,0 +1,48 @@
+# 高级消费者权益保护案由配置
+intent: consumer_advanced_protection
+title: "消费者权益深度保护"
+description: "复杂消费纠纷、网购、服务、虚假宣传等"
+
+risk_words: ["食品安全", "人身伤害", "财产重大损失", "诈骗", "非法集资"]
+
+slots:
+  consumption_type:
+    type: enum
+    options: ["商品购买", "服务消费", "网络购物", "预付卡消费", "金融消费", "其他"]
+    ask: "消费类型？"
+    
+  problem_nature:
+    type: enum
+    options: ["质量问题", "虚假宣传", "价格欺诈", "售后拒绝", "安全隐患", "合同违约"]
+    ask: "问题性质？"
+    
+  loss_amount:
+    type: text
+    ask: "经济损失金额？(元)"
+    
+  merchant_attitude:
+    type: enum
+    options: ["积极解决", "推诿责任", "拒绝处理", "态度恶劣", "失联"]
+    ask: "商家处理态度？"
+    
+  evidence_collection:
+    type: bool
+    ask: "是否保留购买凭证和证据？(是/否)"
+    
+  complaint_attempts:
+    type: enum
+    options: ["未投诉", "已向商家投诉", "已向平台投诉", "已向工商投诉", "已向法院起诉"]
+    ask: "投诉维权进展？"
+    
+  seeking_compensation:
+    type: enum
+    options: ["退款", "换货", "修理", "赔偿损失", "惩罚性赔偿", "其他"]
+    ask: "期望的解决方案？"
+
+next_questions:
+  - condition: "problem_nature == '安全隐患' and loss_amount > '10000'"
+    action: "risk_escalation"
+    message: "重大安全问题建议向相关监管部门举报"
+  - condition: "seeking_compensation == '惩罚性赔偿'"
+    action: "guidance"
+    message: "消费者权益保护法支持三倍赔偿，需要证明故意欺诈"

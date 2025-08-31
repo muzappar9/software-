@@ -1,0 +1,47 @@
+# 民事诉讼程序案由配置
+intent: civil_procedure
+title: "民事诉讼程序"
+description: "起诉、应诉、执行等民事诉讼程序咨询"
+
+risk_words: ["时效过期", "管辖异议", "财产保全失效"]
+
+slots:
+  procedure_stage:
+    type: enum
+    options: ["准备起诉", "已起诉待审理", "一审中", "二审中", "执行中", "其他"]
+    ask: "目前诉讼阶段？"
+    
+  case_value:
+    type: text
+    ask: "案件标的额大概多少？(万元)"
+    
+  jurisdiction_court:
+    type: text
+    ask: "管辖法院是哪里？"
+    
+  has_lawyer:
+    type: bool
+    ask: "是否已委托律师？(是/否)"
+    
+  evidence_status:
+    type: enum
+    options: ["证据充分", "证据不足", "需要收集", "对方举证"]
+    ask: "证据收集情况？"
+    
+  time_limitation:
+    type: enum
+    options: ["在时效内", "可能超时效", "已超时效", "不确定"]
+    ask: "诉讼时效情况？"
+    
+  opposing_response:
+    type: enum
+    options: ["积极应诉", "消极应诉", "反驳证据", "提起反诉", "未应诉"]
+    ask: "对方当事人反应？"
+
+next_questions:
+  - condition: "time_limitation == '已超时效'"
+    action: "risk_escalation"
+    message: "诉讼时效问题严重，建议立即咨询专业律师"
+  - condition: "procedure_stage == '准备起诉' and has_lawyer == False"
+    action: "guidance"
+    message: "建议先收集证据，评估案件胜诉可能性"

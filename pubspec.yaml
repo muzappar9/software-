@@ -63,6 +63,7 @@ dependencies:
 
   # 本地数据库与解析
   sqflite: ^2.3.2
+  sqflite_common_ffi: ^2.3.0+4
   yaml: ^3.1.2
   # ffi: ^2.1.2  # temporarily disabled to match current Dart/Flutter SDK
   
@@ -92,6 +93,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/lawpack.db
     - assets/models/
