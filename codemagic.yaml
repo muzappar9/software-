@@ -57,21 +57,70 @@ workflows:
       - name: Build APK with Flutter
         script: |
           echo "🚀 Building APK with enhanced configuration..."
-          flutter build apk --release --verbose
-          echo "✅ APK build completed"
+          echo "📋 Current working directory: $(pwd)"
+          echo "📋 Flutter version:"
+          flutter --version
           
-      - name: Verify APK location
+          # 确保在正确的目录
+          cd $FCI_BUILD_DIR
+          echo "📋 Build directory: $(pwd)"
+          
+          # 详细的Flutter构建过程
+          echo "🔨 Starting Flutter APK build..."
+          flutter build apk --release --verbose
+          
+          # 检查构建结果
+          if [ $? -eq 0 ]; then
+            echo "✅ Flutter build command completed successfully"
+          else
+            echo "❌ Flutter build command failed with exit code $?"
+            exit 1
+          fi
+          
+      - name: Comprehensive APK search
         script: |
-          echo "🔍 Checking APK file location..."
-          find . -name "*.apk" -type f
-          ls -la build/app/outputs/flutter-apk/ || echo "Directory not found"
-          ls -la build/app/outputs/apk/release/ || echo "Alternative directory not found"
-          echo "📁 Build directory structure:"
-          find build -name "*.apk" -type f 2>/dev/null || echo "No APK files found in build directory"
+          echo "🔍 Comprehensive APK file search..."
+          echo "📁 Current directory: $(pwd)"
+          
+          # 全系统搜索APK文件
+          echo "🔍 Searching for ALL .apk files in current directory tree:"
+          find . -name "*.apk" -type f 2>/dev/null || echo "No .apk files found"
+          
+          # 检查可能的构建输出目录
+          echo "📂 Checking possible build directories:"
+          for dir in "build/app/outputs/flutter-apk" "build/app/outputs/apk/release" "build/app/outputs/bundle/release" "android/app/build/outputs/apk/release"; do
+            if [ -d "$dir" ]; then
+              echo "✅ Directory exists: $dir"
+              ls -la "$dir"
+            else
+              echo "❌ Directory not found: $dir"
+            fi
+          done
+          
+          # 显示完整的build目录结构
+          echo "🗂️ Complete build directory structure:"
+          if [ -d "build" ]; then
+            find build -type f -name "*.apk" -o -name "*.aab" 2>/dev/null || echo "No APK/AAB files in build directory"
+            echo "📁 Build directory tree (first 50 lines):"
+            find build -type f | head -50 || echo "Build directory is empty or doesn't exist"
+          else
+            echo "❌ Build directory doesn't exist!"
+          fi
+          
+          # 检查Android项目结构
+          echo "📱 Android build outputs:"
+          if [ -d "android" ]; then
+            find android -name "*.apk" -type f 2>/dev/null || echo "No APK files in android directory"
+          else
+            echo "❌ Android directory doesn't exist!"
+          fi
           
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
       - build/app/outputs/apk/release/*.apk
+      - android/app/build/outputs/apk/release/*.apk
+      - build/**/*.apk
+      - android/**/*.apk
       - "**/*.apk"
 
     publishing:
