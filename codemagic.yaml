@@ -34,15 +34,32 @@ workflows:
           echo "org.gradle.parallel=true" >> $HOME/.gradle/gradle.properties
           echo "org.gradle.configureondemand=true" >> $HOME/.gradle/gradle.properties
 
-      - name: Force reset Flutter packages (Gemini 2.5 Pro strategy)
+      - name: AGGRESSIVE cache clearing and package reset
         script: |
-          echo "🔄 Implementing Gemini 2.5 Pro recommended reset strategy..."
-          # 强制清理和重置依赖
+          echo "🧹 AGGRESSIVE clearing of all caches and dependencies..."
+          
+          # 1. Flutter清理
           flutter clean
+          
+          # 2. 删除所有锁定文件和缓存
           rm -f pubspec.lock
+          rm -rf .dart_tool/
+          rm -rf build/
+          rm -rf .packages
+          
+          # 3. 清理Gradle缓存
+          rm -rf android/.gradle/
+          rm -rf android/app/build/
+          rm -rf android/build/
+          
+          # 4. 清理系统包缓存
+          flutter pub cache clean || true
+          flutter pub cache repair || true
+          
+          # 5. 重新获取依赖
           flutter pub get
-          flutter pub upgrade
-          echo "✅ Flutter packages reset completed"
+          
+          echo "✅ AGGRESSIVE cache clearing completed"
           
       - name: Verify Android embedding configuration
         script: |
