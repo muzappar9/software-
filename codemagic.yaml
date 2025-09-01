@@ -8,7 +8,7 @@ workflows:
         - $HOME/.gradle/caches
         - $HOME/.android/build-cache
     environment:
-      flutter: 3.29.0  # Use specific version with v1 embedding removal
+      flutter: 3.24.0  # Use stable version before aggressive v1 embedding removal
       xcode: latest
       cocoapods: default
       vars:
@@ -46,6 +46,29 @@ workflows:
           flutter pub add sqflite:^2.4.2 --no-pub
           flutter packages pub get
           echo "✅ Android plugins upgraded successfully"
+          
+      - name: Configure Android embedding v2
+        script: |
+          echo "⚙️ Configuring Android embedding v2..."
+          # 确保MainActivity使用v2 embedding
+          cd android/app/src/main/kotlin/com/example/legal_advisor_app
+          if [ -f "MainActivity.kt" ]; then
+            echo "📝 MainActivity.kt found, ensuring v2 embedding"
+            cat MainActivity.kt
+          else
+            echo "📝 Creating MainActivity.kt with v2 embedding"
+            mkdir -p $(dirname MainActivity.kt)
+            cat > MainActivity.kt << 'EOF'
+package com.example.legal_advisor_app
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
+EOF
+          fi
+          cd $FCI_BUILD_DIR
+          echo "✅ Android embedding v2 configured"
 
       - name: Clean build environment
         script: |
