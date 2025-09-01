@@ -47,28 +47,14 @@ workflows:
           flutter packages pub get
           echo "✅ Android plugins upgraded successfully"
           
-      - name: Configure Android embedding v2
+      - name: Verify Android embedding configuration
         script: |
-          echo "⚙️ Configuring Android embedding v2..."
-          # 确保MainActivity使用v2 embedding
-          cd android/app/src/main/kotlin/com/example/legal_advisor_app
-          if [ -f "MainActivity.kt" ]; then
-            echo "📝 MainActivity.kt found, ensuring v2 embedding"
-            cat MainActivity.kt
-          else
-            echo "📝 Creating MainActivity.kt with v2 embedding"
-            mkdir -p $(dirname MainActivity.kt)
-            cat > MainActivity.kt << 'EOF'
-package com.example.legal_advisor_app
-
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity: FlutterActivity() {
-}
-EOF
-          fi
-          cd $FCI_BUILD_DIR
-          echo "✅ Android embedding v2 configured"
+          echo "⚙️ Verifying Android embedding v2 configuration..."
+          echo "📝 Checking AndroidManifest.xml embedding setting:"
+          grep -n "flutterEmbedding" android/app/src/main/AndroidManifest.xml || echo "Embedding setting not found"
+          echo "📁 Checking MainActivity structure:"
+          find android/app/src -name "MainActivity.*" -type f || echo "MainActivity not found"
+          echo "✅ Android embedding verification completed"
 
       - name: Clean build environment
         script: |
