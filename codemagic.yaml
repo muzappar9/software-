@@ -8,7 +8,7 @@ workflows:
         - $HOME/.gradle/caches
         - $HOME/.android/build-cache
     environment:
-      flutter: stable
+      flutter: 3.29.0  # Use specific version with v1 embedding removal
       xcode: latest
       cocoapods: default
       vars:
@@ -34,13 +34,6 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter packages pub get
-          
-      - name: Force upgrade Android plugins
-        script: |
-          echo "Upgrading Android plugins for compatibility..."
-          flutter pub add shared_preferences:^2.5.3
-          flutter pub add path_provider:^2.1.5
-          flutter pub add sqflite:^2.4.2
 
       - name: Build APK with Flutter
         script: |
