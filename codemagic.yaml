@@ -7,6 +7,9 @@ workflows:
       cache_paths:
         - $HOME/.gradle/caches
         - $HOME/.android/build-cache
+        - $HOME/.pub-cache
+        - $FCI_BUILD_DIR/.dart_tool
+      # 性能优化：增加缓存路径
     environment:
       flutter: 3.19.6  # Conservative stable version for Kotlin compatibility
       xcode: latest
@@ -34,105 +37,53 @@ workflows:
           echo "org.gradle.parallel=true" >> $HOME/.gradle/gradle.properties
           echo "org.gradle.configureondemand=true" >> $HOME/.gradle/gradle.properties
 
-      - name: AGGRESSIVE cache clearing and package reset
+      - name: FAST minimal package reset 
         script: |
-          echo "🧹 AGGRESSIVE clearing of all caches and dependencies..."
+          echo "🚀 FAST minimal package reset for speed..."
           
-          # 1. Flutter清理
+          # 只做必要的清理
           flutter clean
-          
-          # 2. 删除所有锁定文件和缓存
           rm -f pubspec.lock
-          rm -rf .dart_tool/
-          rm -rf build/
-          rm -rf .packages
           
-          # 3. 清理Gradle缓存
-          rm -rf android/.gradle/
-          rm -rf android/app/build/
-          rm -rf android/build/
+          # 删除localizations残留文件
+          rm -f l10n.yaml || true
+          rm -rf .dart_tool/flutter_gen/gen_l10n/ || true
+          rm -rf lib/l10n/ || true
           
-          # 4. 清理系统包缓存
-          flutter pub cache clean || true
-          flutter pub cache repair || true
-          
-          # 5. 重新获取依赖
+          # 快速获取依赖（极简依赖）
           flutter pub get
           
-          echo "✅ AGGRESSIVE cache clearing completed"
+          echo "✅ FAST reset completed"
           
-      - name: Verify Android embedding configuration
-        script: |
-          echo "⚙️ Verifying Android embedding v2 configuration..."
-          echo "📝 Checking AndroidManifest.xml embedding setting:"
-          grep -n "flutterEmbedding" android/app/src/main/AndroidManifest.xml || echo "Embedding setting not found"
-          echo "📁 Checking MainActivity structure:"
-          find android/app/src -name "MainActivity.*" -type f || echo "MainActivity not found"
-          echo "✅ Android embedding verification completed"
-
-      - name: Clean build environment
-        script: |
-          echo "🧹 Cleaning build environment..."
-          flutter clean
-          cd android && ./gradlew clean && cd ..
-          echo "✅ Build environment cleaned"
+      # SPEED OPTIMIZATION: Skip verification steps for minimal test
           
-      - name: Build APK with Flutter (Gemini 2.5 Pro verbose mode)
+      - name: Build APK with Flutter (FAST mode)
         script: |
-          echo "🚀 Building APK with Gemini 2.5 Pro recommended verbose configuration..."
-          echo "📋 Flutter version verification:"
-          flutter --version
-          echo "📋 Current working directory: $(pwd)"
+          echo "🚀 Building APK with FAST mode..."
+          echo "📋 Flutter version: $(flutter --version | head -1)"
           
-          # Gemini建议的详细构建过程
-          echo "🔨 Starting Flutter APK build with verbose logging..."
-          flutter build apk --release --verbose
+          # 简化的快速构建过程
+          echo "🔨 Starting Flutter APK build..."
+          flutter build apk --release
           
           # 检查构建结果
           if [ $? -eq 0 ]; then
-            echo "✅ Flutter build command completed successfully"
+            echo "✅ APK build completed successfully!"
           else
-            echo "❌ Flutter build command failed with exit code $?"
-            echo "📋 Build failure - verbose logs above show detailed error information"
+            echo "❌ APK build failed with exit code $?"
             exit 1
           fi
           
-      - name: Comprehensive APK search
+      - name: Verify APK created
         script: |
-          echo "🔍 Comprehensive APK file search..."
-          echo "📁 Current directory: $(pwd)"
-          
-          # 全系统搜索APK文件
-          echo "🔍 Searching for ALL .apk files in current directory tree:"
-          find . -name "*.apk" -type f 2>/dev/null || echo "No .apk files found"
-          
-          # 检查可能的构建输出目录
-          echo "📂 Checking possible build directories:"
-          for dir in "build/app/outputs/flutter-apk" "build/app/outputs/apk/release" "build/app/outputs/bundle/release" "android/app/build/outputs/apk/release"; do
-            if [ -d "$dir" ]; then
-              echo "✅ Directory exists: $dir"
-              ls -la "$dir"
-            else
-              echo "❌ Directory not found: $dir"
-            fi
-          done
-          
-          # 显示完整的build目录结构
-          echo "🗂️ Complete build directory structure:"
-          if [ -d "build" ]; then
-            find build -type f -name "*.apk" -o -name "*.aab" 2>/dev/null || echo "No APK/AAB files in build directory"
-            echo "📁 Build directory tree (first 50 lines):"
-            find build -type f | head -50 || echo "Build directory is empty or doesn't exist"
+          echo "🔍 Quick APK verification..."
+          APK_FILE=$(find . -name "*.apk" -type f | head -1)
+          if [ -n "$APK_FILE" ]; then
+            echo "✅ APK found: $APK_FILE"
+            ls -lh "$APK_FILE"
           else
-            echo "❌ Build directory doesn't exist!"
-          fi
-          
-          # 检查Android项目结构
-          echo "📱 Android build outputs:"
-          if [ -d "android" ]; then
-            find android -name "*.apk" -type f 2>/dev/null || echo "No APK files in android directory"
-          else
-            echo "❌ Android directory doesn't exist!"
+            echo "❌ No APK file found!"
+            exit 1
           fi
           
     artifacts:
