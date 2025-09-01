@@ -84,12 +84,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
-  # TEMPORARILY REMOVED FOR MINIMAL TEST:
-  # generate: true  # Commented out to avoid code generation issues
-  # assets:
-  #   - assets/lawpack.db  # Removed to avoid LFS/database issues
-  #   - assets/models/
-  #   - assets/slots/
+  generate: true  # REQUIRED for flutter_localizations
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
