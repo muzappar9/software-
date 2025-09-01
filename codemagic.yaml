@@ -60,8 +60,19 @@ workflows:
           flutter build apk --release --verbose
           echo "✅ APK build completed"
           
+      - name: Verify APK location
+        script: |
+          echo "🔍 Checking APK file location..."
+          find . -name "*.apk" -type f
+          ls -la build/app/outputs/flutter-apk/ || echo "Directory not found"
+          ls -la build/app/outputs/apk/release/ || echo "Alternative directory not found"
+          echo "📁 Build directory structure:"
+          find build -name "*.apk" -type f 2>/dev/null || echo "No APK files found in build directory"
+          
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/apk/release/*.apk
+      - "**/*.apk"
 
     publishing:
       # android_signing:
