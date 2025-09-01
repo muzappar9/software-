@@ -3,6 +3,12 @@ workflows:
     name: Android Build
     instance_type: mac_mini_m1
     max_build_duration: 120
+    # GPT-5建议：严格限制触发源，防止构建旧提交
+    branch_patterns:
+      - pattern: main
+        include: true
+        source: true
+    cancel_previous_builds: true  # 新提交时自动取消旧构建
     cache:
       # 💣 DISABLE ALL CACHING - Force fresh build every time
       cache_paths: []
@@ -14,6 +20,38 @@ workflows:
       vars:
         JAVA_TOOL_OPTIONS: "-Xmx8g"
     scripts:
+      - name: 🔍 TRUTH VERIFICATION - Assert repo state & Kotlin sources
+        script: |
+          set -euxo pipefail
+          echo "🔍 ===== GPT-5 DIAGNOSTIC SCRIPT ====="
+          echo "CM_BRANCH=$CM_BRANCH"
+          echo "CM_COMMIT=$CM_COMMIT"
+          echo "Git HEAD: $(git rev-parse HEAD)"
+          echo "Latest commit (on this checkout):"
+          git log -1 --pretty='format:%H %ad %an %s' --date=iso
+
+          echo "==== 🕵️ Kotlin files that mention GemmaInference / ModelVerificationTest ===="
+          grep -RIn "GemmaInference\|ModelVerificationTest" android/app/src/main/kotlin || true
+
+          echo "==== 📁 ALL MainActivity.kt files in project ===="
+          find android -type f -name MainActivity.kt -print
+
+          echo "==== 📄 Target MainActivity.kt (path + line count) ===="
+          target="android/app/src/main/kotlin/com/example/legal_advisor_app/MainActivity.kt"
+          ls -l "$target"
+          wc -l "$target"
+          echo "==== 📋 First 200 lines of MainActivity.kt ===="
+          nl -ba "$target" | sed -n '1,200p'
+
+          echo "🛡️ ===== FUSE CHECK ====="
+          lines=$(wc -l < "$target")
+          if [ "$lines" -gt 20 ] || ! grep -q "class MainActivity: FlutterActivity" "$target"; then
+            echo "🚨 FUSE TRIPPED: Unexpected MainActivity.kt content (lines=$lines)."
+            echo "📍 Please check branch/tag/PR merge-commit and duplicate files."
+            exit 1
+          fi
+          echo "✅ FUSE PASSED: MainActivity.kt is minimal as expected"
+
       - name: Set up local properties
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > "$FCI_BUILD_DIR/android/local.properties"
