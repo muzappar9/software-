@@ -20,8 +20,11 @@ workflows:
 
       - name: Install Android SDK components
         script: |
-          echo "Installing Android SDK components..."
+          echo "📱 Installing Android SDK components..."
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;34.0.0" "ndk;26.1.10909125" --channel=3
+          echo "🔄 Updating Android SDK..."
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update
+          echo "✅ Android SDK setup completed"
 
       - name: Setup Gradle properties for memory
         script: |
@@ -34,10 +37,28 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter packages pub get
+          
+      - name: Force upgrade problematic Android plugins
+        script: |
+          echo "🔧 Force upgrading Android plugins to latest versions..."
+          flutter pub add shared_preferences:^2.5.3 --no-pub
+          flutter pub add path_provider:^2.1.5 --no-pub  
+          flutter pub add sqflite:^2.4.2 --no-pub
+          flutter packages pub get
+          echo "✅ Android plugins upgraded successfully"
 
+      - name: Clean build environment
+        script: |
+          echo "🧹 Cleaning build environment..."
+          flutter clean
+          cd android && ./gradlew clean && cd ..
+          echo "✅ Build environment cleaned"
+          
       - name: Build APK with Flutter
         script: |
-          flutter build apk --release
+          echo "🚀 Building APK with enhanced configuration..."
+          flutter build apk --release --verbose
+          echo "✅ APK build completed"
           
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
