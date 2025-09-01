@@ -8,7 +8,7 @@ workflows:
         - $HOME/.gradle/caches
         - $HOME/.android/build-cache
     environment:
-      flutter: 3.24.0  # Use stable version before aggressive v1 embedding removal
+      flutter: stable  # Use latest stable version
       xcode: latest
       cocoapods: default
       vars:
