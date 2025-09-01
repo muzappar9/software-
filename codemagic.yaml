@@ -8,7 +8,7 @@ workflows:
         - $HOME/.gradle/caches
         - $HOME/.android/build-cache
     environment:
-      flutter: 3.22.2  # Gemini 2.5 Pro recommended stable version
+      flutter: 3.19.6  # Conservative stable version for Kotlin compatibility
       xcode: latest
       cocoapods: default
       vars:

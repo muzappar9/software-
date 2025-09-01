@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'  # Gemini 2.5 Pro recommended for Flutter 3.22.2
+  sdk: '>=3.0.0 <4.0.0'  # Conservative SDK for Flutter 3.19.6 compatibility
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -52,17 +52,17 @@ dependencies:
   http: ^1.1.2
   dio: ^5.4.0
   
-  # 本地存储 - 使用稳定兼容版本
-  shared_preferences: ^2.2.3
+    # 本地存储 - 使用保守兼容版本  
+  shared_preferences: ^2.1.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   
-  # 文件处理 - 使用稳定兼容版本  
-  path_provider: ^2.1.4
+  # 文件处理 - 使用保守兼容版本  
+  path_provider: ^2.0.15
   file_picker: ^8.0.0+1
 
-  # 本地数据库与解析 - 使用稳定兼容版本
-  sqflite: ^2.3.3  # Gemini 2.5 Pro recommended stable version
+  # 本地数据库与解析 - 使用保守兼容版本
+  sqflite: ^2.2.8  # Conservative version for Kotlin compatibility
   sqflite_common_ffi: ^2.3.0+4
   yaml: ^3.1.2
   # ffi: ^2.1.2  # temporarily disabled to match current Dart/Flutter SDK
