@@ -4,12 +4,9 @@ workflows:
     instance_type: mac_mini_m1
     max_build_duration: 120
     cache:
-      cache_paths:
-        - $HOME/.gradle/caches
-        - $HOME/.android/build-cache
-        - $HOME/.pub-cache
-        - $FCI_BUILD_DIR/.dart_tool
-      # 性能优化：增加缓存路径
+      # 💣 DISABLE ALL CACHING - Force fresh build every time
+      cache_paths: []
+      # 缓存已被禁用以确保使用最新代码
     environment:
       flutter: 3.19.6  # Conservative stable version for Kotlin compatibility
       xcode: latest
@@ -37,23 +34,42 @@ workflows:
           echo "org.gradle.parallel=true" >> $HOME/.gradle/gradle.properties
           echo "org.gradle.configureondemand=true" >> $HOME/.gradle/gradle.properties
 
-      - name: FAST minimal package reset 
+      - name: 💣 NUCLEAR cache clear + force latest code
         script: |
-          echo "🚀 FAST minimal package reset for speed..."
+          echo "💣 NUCLEAR OPTION: Complete cache destruction and force git sync"
           
-          # 只做必要的清理
+          # 1️⃣ 强制Git同步 - 确保最新代码
+          echo "🔄 Force pulling latest code..."
+          git fetch origin main
+          git reset --hard origin/main
+          git clean -fdx
+          
+          # 2️⃣ 核爆级清理 - 删除所有缓存
+          echo "💥 Nuclear cache destruction..."
+          rm -rf ~/.gradle/caches/ || true
+          rm -rf ~/.android/build-cache/ || true
+          rm -rf ~/.pub-cache/ || true
+          rm -rf .dart_tool/ || true
+          rm -rf build/ || true
+          rm -rf android/.gradle/ || true
+          rm -rf android/app/build/ || true
+          rm -rf android/build/ || true
+          
+          # 3️⃣ Flutter完全重置
+          echo "🚀 Flutter complete reset..."
           flutter clean
           rm -f pubspec.lock
-          
-          # 删除localizations残留文件
           rm -f l10n.yaml || true
-          rm -rf .dart_tool/flutter_gen/gen_l10n/ || true
           rm -rf lib/l10n/ || true
           
-          # 快速获取依赖（极简依赖）
+          # 4️⃣ 验证MainActivity.kt文件
+          echo "🔍 Verifying MainActivity.kt is ultra-minimal..."
+          cat android/app/src/main/kotlin/com/example/legal_advisor_app/MainActivity.kt
+          
+          # 5️⃣ 重新获取依赖
           flutter pub get
           
-          echo "✅ FAST reset completed"
+          echo "✅ NUCLEAR reset completed - fresh environment guaranteed"
           
       # SPEED OPTIMIZATION: Skip verification steps for minimal test
           
