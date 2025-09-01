@@ -1,4 +1,3 @@
-// ULTRA-MINIMAL VERSION FOR BUILD TEST
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +10,7 @@ class MinimalLegalAdvisorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Legal Advisor App - Minimal Build Test',
+      title: 'Legal Advisor App - Minimal',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -36,24 +35,19 @@ class MinimalHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '⚖️ Legal Advisor App',
+              'Legal Advisor App',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             Text(
-              '✅ Minimal build test successful!',
-              style: TextStyle(fontSize: 16, color: Colors.green),
+              'Minimal build test successful!',
+              style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
             Icon(
               Icons.check_circle,
               color: Colors.green,
               size: 48,
-            ),
-            SizedBox(height: 20),
-            Text(
-              'APK构建成功！🎉',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),

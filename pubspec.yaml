@@ -31,15 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # 最小化测试：只保留基本UI组件
+  # 最极简配置：只保留绝对必需的
   cupertino_icons: ^1.0.2
-  
-  # 多语言国际化 - Flutter核心功能
-  flutter_localizations:
-    sdk: flutter
-  
-  # 基本网络请求 - 纯Dart实现，无原生依赖
-  http: ^1.1.2
   
   # TEMPORARILY REMOVED FOR MINIMAL TEST:
   # All native plugins commented out to isolate build issues
@@ -84,7 +77,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
-  generate: true  # REQUIRED for flutter_localizations
+  # ULTRA-MINIMAL: No internationalization, no code generation
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
