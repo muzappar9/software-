@@ -18,10 +18,10 @@ workflows:
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > "$FCI_BUILD_DIR/android/local.properties"
 
-      - name: Install Android NDK
+      - name: Install Android SDK components
         script: |
-          echo "Installing NDK 26.1.10909125..."
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;26.1.10909125" --channel=3
+          echo "Installing Android SDK components..."
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;34.0.0" "ndk;26.1.10909125" --channel=3
 
       - name: Setup Gradle properties for memory
         script: |
