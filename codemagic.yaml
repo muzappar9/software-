@@ -8,7 +8,7 @@ workflows:
         - $HOME/.gradle/caches
         - $HOME/.android/build-cache
     environment:
-      flutter: stable  # Use latest stable version
+      flutter: 3.22.2  # Gemini 2.5 Pro recommended stable version
       xcode: latest
       cocoapods: default
       vars:
@@ -34,18 +34,15 @@ workflows:
           echo "org.gradle.parallel=true" >> $HOME/.gradle/gradle.properties
           echo "org.gradle.configureondemand=true" >> $HOME/.gradle/gradle.properties
 
-      - name: Get Flutter packages
+      - name: Force reset Flutter packages (Gemini 2.5 Pro strategy)
         script: |
-          flutter packages pub get
-          
-      - name: Force upgrade problematic Android plugins
-        script: |
-          echo "🔧 Force upgrading Android plugins to latest versions..."
-          flutter pub add shared_preferences:^2.5.3 --no-pub
-          flutter pub add path_provider:^2.1.5 --no-pub  
-          flutter pub add sqflite:^2.4.2 --no-pub
-          flutter packages pub get
-          echo "✅ Android plugins upgraded successfully"
+          echo "🔄 Implementing Gemini 2.5 Pro recommended reset strategy..."
+          # 强制清理和重置依赖
+          flutter clean
+          rm -f pubspec.lock
+          flutter pub get
+          flutter pub upgrade
+          echo "✅ Flutter packages reset completed"
           
       - name: Verify Android embedding configuration
         script: |
@@ -63,19 +60,15 @@ workflows:
           cd android && ./gradlew clean && cd ..
           echo "✅ Build environment cleaned"
           
-      - name: Build APK with Flutter
+      - name: Build APK with Flutter (Gemini 2.5 Pro verbose mode)
         script: |
-          echo "🚀 Building APK with enhanced configuration..."
-          echo "📋 Current working directory: $(pwd)"
-          echo "📋 Flutter version:"
+          echo "🚀 Building APK with Gemini 2.5 Pro recommended verbose configuration..."
+          echo "📋 Flutter version verification:"
           flutter --version
+          echo "📋 Current working directory: $(pwd)"
           
-          # 确保在正确的目录
-          cd $FCI_BUILD_DIR
-          echo "📋 Build directory: $(pwd)"
-          
-          # 详细的Flutter构建过程
-          echo "🔨 Starting Flutter APK build..."
+          # Gemini建议的详细构建过程
+          echo "🔨 Starting Flutter APK build with verbose logging..."
           flutter build apk --release --verbose
           
           # 检查构建结果
@@ -83,6 +76,7 @@ workflows:
             echo "✅ Flutter build command completed successfully"
           else
             echo "❌ Flutter build command failed with exit code $?"
+            echo "📋 Build failure - verbose logs above show detailed error information"
             exit 1
           fi
           
